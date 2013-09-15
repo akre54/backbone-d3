@@ -1,0 +1,21 @@
+{
+  "name": "backbone-d3",
+  "version": "0.1.0",
+  "homepage": "https://github.com/akre54/backbone-d3",
+  "authors": [
+    "Adam Krebs <amk528@cs.nyu.edu>"
+  ],
+  "description": "A jQuery-to-D3 Adapter for Backbone",
+  "main": "d3-adapter.js",
+  "keywords": [
+    "D3",
+    "Backbone",
+    "jQuery",
+    "adapter",
+    "shim",
+    "sync",
+    "select",
+    "DOM"
+  ],
+  "license": "Apache 2.0"
+}
