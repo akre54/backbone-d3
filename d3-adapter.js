@@ -30,19 +30,11 @@
   'use strict'
 
   var D3Adapter = function(elements) {
-    switch(Object.prototype.toString.call(elements)) {
-      case "[object NodeList]":
-      case "[object Array]":
-      case "[object String]":
-        this.d3Selection = d3.selectAll(elements);
-        break;
-      default:
-        if (elements.nodeType) {
-          this.d3Selection = d3.select(elements);
-        } else {
-          this.d3Selection = d3.selectAll(elements);
-        }
-        break;
+
+    if (elements.nodeType) {
+      this.d3Selection = d3.select(elements);
+    } else {
+      this.d3Selection = d3.selectAll(elements);
     }
 
     this.length = this.d3Selection.length;
@@ -138,7 +130,7 @@
      * @return Boolean
      */
     is: function(selector) {
-      return this[0].tagName.toLowerCase() == selector.toLowerCase();
+      return this[0].tagName.toLowerCase() === selector.toLowerCase();
     },
 
     /**
@@ -158,8 +150,8 @@
         selector = null;
       }
 
-      var adapter = selector ? this.find(selector) : this;
-      adapter.d3Selection.on(eventName, function() {
+      var context = selector ? this.find(selector) : this;
+      context.d3Selection.on(eventName, function() {
         method(d3.event);
       });
       return this;
@@ -261,11 +253,13 @@
         _.each(elements, function(el) {
           if (_.isObject(context)) _.extend(el, context);
         });
+        return new D3Adapter(elements);
       } else {
-        // selector
+        // Handle jQuery(expression) and jQuery(expression, context).
+        context = context || document;
         elements = expression;
+        return new D3Adapter(elements);
       }
-      return new D3Adapter(elements);
     } else if (typeof expression == 'object') {
       if (expression instanceof D3Adapter) {
         // Handle jQuery(D3Adapter)
@@ -275,11 +269,6 @@
         return new D3Adapter(expression);
       }
     }
-
-    // Handle jQuery(expression) and jQuery(expression, context).
-    context = context || document;
-    elements = d3.select(context).selectAll(expression);
-    return new D3Adapter(elements);
   };
 
   /**
