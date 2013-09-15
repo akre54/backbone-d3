@@ -23,7 +23,6 @@ Backbone 1.0.0:
 
  * Backbone.View: View: delegateEvents
  * Backbone.View: View: undelegateEvents
- * Backbone.View: View: multiple views per element
  * Backbone.View: Any tests with complex $el.is() tests
  * All Backbone.Router and Backbone.History
 
