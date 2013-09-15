@@ -22,10 +22,9 @@
  * limitations under the License.
  */
 
-/*
- * This file provides a basic jQuery to d3 Adapter. It allows us to run Backbone.js
- * with minimal modifications.
- */
+
+// This file provides a basic jQuery to d3 Adapter. It allows us to run Backbone.js
+// with minimal modifications.
 (function(window) {
   'use strict'
 
@@ -48,24 +47,11 @@
     length: 0,
     d3Selection: null,
 
-    /**
-     * Set the attributes of the element defined by the D3Adapter.
-     *
-     * @param map:Object literal map definining the attributes and the values to which
-     *     they should be set.
-     *
-     * @return D3Adapter The object on which this method was called.
-     */
     attr: function(map) {
       this.d3Selection.attr(map);
       return this;
     },
 
-    /**
-     * Iterate over the set of elements, running a callback function on them
-     *
-     * @param cb:Function the callback
-     */
     each: function(cb) {
       var elements = this.toArray();
       for (var i = 0, l = this.length; i < l; i++) {
@@ -73,28 +59,10 @@
       };
     },
 
-    /**
-     * Find all elements that match a given selector which are descendants of the
-     * elements selected the D3Adapter.
-     *
-     * @param selector:String - A css3 selector;
-     *
-     * @return D3Adapter A D3Adapter containing the selected
-     *     elements.
-     */
     find: function(selector) {
       return new D3Adapter(this.d3Selection.selectAll(selector)[0]);
     },
 
-    /**
-     * Return the element at the specified index on the D3Adapter.
-     * Equivalent to D3Adapter[index].
-     *
-     * @param index:Number a numerical index.
-     *
-     * @return HTMLElement An HTML element from the D3Adapter. Returns undefined
-     *     if an element at that index does not exist.
-     */
     get: function(index) {
       return index == null ?
 
@@ -105,13 +73,6 @@
         (index < 0 ? this[this.d3Selection.length + index] : this[index]);
     },
 
-    /**
-     * Set the HTML contents of the elements contained by the D3Adapter.
-     *
-     * @param htmlString:String A string of HTML text.
-     *
-     * @return D3Adapter The object the method was called on or html string
-     */
     html: function(htmlString) {
       if (htmlString) {
         this.d3Selection.html(htmlString);
@@ -121,29 +82,11 @@
       }
     },
 
-    /**
-     * Determines if the passed selector matches the current set of elements
-     * Currently *very* basic. Compares tagNames
-     *
-     * @param selector:String to check against
-     *
-     * @return Boolean
-     */
+    // Currently *very* basic. Compares tagNames
     is: function(selector) {
       return this[0].tagName.toLowerCase() === selector.toLowerCase();
     },
 
-    /**
-     * Bind the elements on the D3Adapter to call the specific method for the specific
-     * event.
-     *
-     * @param eventName:String The name of the event.
-     * @param selector:String (optional) The selector of a child element to attach
-     *     events onto
-     * @param method:Function The callback to apply when the event is fired.
-     *
-     * @return D3Adapter The object the method was called on.
-     */
     on: function(eventName, selector, method) {
       if (typeof selector == 'function') {
         method = selector;
@@ -157,27 +100,17 @@
       return this;
     },
 
-    /**
-     * Unbind the bound events for the element.
-     */
     off: function(eventName) {
       this.d3Selection.on(eventName, null);
       return this;
     },
 
-     /**
-      * Removes from the DOM all the elements selected by the D3Adapter.
-      */
     remove: function() {
       this.d3Selection.remove();
       return this;
     },
 
-    /**
-     * Add a callback for when the element (usually document) is ready.
-     *
-     * @param callback:function
-     */
+    // shim $(document).ready(...)
     ready: function(callback) {
       this.d3Selection.each(function() {
         if (this.readyState == 'complete') callback();
@@ -186,30 +119,19 @@
       });
     },
 
-    /**
-     * Return the text content of all the elements selected by the D3Adapter.
-     * The text of the different elements is seperated by a space.
-     *
-     * @return String The text contents of all the elements selected by the D3Adapter.
-     */
     text: function(text) {
-      return this.d3Selection.text(text);
+      if (text) {
+        this.d3Selection.text(text);
+        return this;
+      } else {
+        return this.d3Selection.text();
+      }
     },
 
-    /**
-    * Retrieve all the DOM elements contained in the jQuery set, as an array.
-    *
-    * @return
-    */
     toArray: function() {
       return [].slice.call(this);
     },
 
-    /**
-     * Fire a specific event on the elements selected by the D3Adapter.
-     *
-     * @param trigger:
-     */
     trigger: function(eventName) {
       this.each(function(el) {
         var method = el[eventName];
@@ -218,27 +140,23 @@
       return this;
     },
 
-    /**
-     * Alias for this.on
-     */
+    // Alias for this.on
     unbind: function() {
       return this.on.apply(this, arguments);
     }
   });
 
-  /**
-   * JQuery Selector Methods
-   *
-   * jQuery(html) - Returns an HTML element wrapped in a D3Adapter.
-   * jQuery(expression) - Returns a D3Adapter containing an element set corresponding the
-   *     elements selected by the expression.
-   * jQuery(expression, context) - Returns a D3Adapter containing an element set corresponding
-   *     to applying the expression in the specified context.
-   * jQuery(element) - Wraps the provided element in a D3Adapter and returns it.
-   *
-   * @return D3Adapter an adapter element containing the selected/constructed
-   *     elements.
-   */
+  // JQuery Selector Methods
+  //
+  // jQuery(html) - Returns an HTML element wrapped in a D3Adapter.
+  // jQuery(expression) - Returns a D3Adapter containing an element set corresponding the
+  //     elements selected by the expression.
+  // jQuery(expression, context) - Returns a D3Adapter containing an element set corresponding
+  //     to applying the expression in the specified context.
+  // jQuery(element) - Wraps the provided element in a D3Adapter and returns it.
+  //
+  // @return D3Adapter an adapter element containing the selected/constructed
+  //     elements.
   window.jQuery = window.$ = function(expression, context) {
     var elements;
 
@@ -271,11 +189,9 @@
     }
   };
 
-  /**
-   * jQuery.ajax
-   *
-   * Maps a jQuery ajax request to a d3.xhr and sends it.
-   */
+  // jQuery.ajax
+  //
+  // Maps a jQuery ajax request to a d3.xhr and sends it.
   window.jQuery.ajax = function(params) {
     _.defaults(params, {
       success: _.identity,
