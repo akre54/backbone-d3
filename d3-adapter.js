@@ -37,7 +37,7 @@
         this.d3Selection = d3.selectAll(elements);
         break;
       default:
-        if (elements.nodeType){
+        if (elements.nodeType) {
           this.d3Selection = d3.select(elements);
         } else {
           this.d3Selection = d3.selectAll(elements);
@@ -153,6 +153,11 @@
      * @return D3Adapter The object the method was called on.
      */
     on: function(eventName, selector, method) {
+      if (typeof selector == 'function') {
+        method = selector;
+        selector = null;
+      }
+
       var adapter = selector ? this.find(selector) : this;
       adapter.d3Selection.on(eventName, function() {
         method(d3.event);
@@ -270,30 +275,19 @@
     return new D3Adapter(elements);
   };
 
-  /*
+  /**
    * jQuery.ajax
    *
-   * Maps a jQuery ajax request to a d3.json and sends it.
+   * Maps a jQuery ajax request to a d3.xhr and sends it.
    */
   window.jQuery.ajax = function(params) {
-    params = _.defaults(params, {
-      error: _.identity,
-      success: _.identity
+    _.defaults(params, {
+      success: _.identity,
+      error: _.identity
     });
 
-    var parameters = {
-      url: params.url,
-      method: params.type,
-      data: data,
-      emulation: emulation,
-      onSuccess: function(responseText) {
-          params.success(JSON.parse(responseText));
-      },
-      onFailure: params.error,
-      headers: { 'Content-Type': params.contentType }
-    };
-
-    return d3.json(params.url, function(error, json) {
+    var xhr = d3.xhr(params.url, params.contentType);
+    return xhr.send(params.type, params.data, function(error, json) {
       if (error) {
         params.error(error);
       } else {
