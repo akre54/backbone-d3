@@ -123,9 +123,11 @@
 
     trigger: function(eventName) {
       this.each(function(el) {
-        var method = el[eventName];
-        method && method.call(el);
+        var evt = document.createEvent('UIEvents');
+        evt.initUIEvent(eventName, true, true, window, 0);
+        el.dispatchEvent(evt);
       });
+
       return this;
     },
 
