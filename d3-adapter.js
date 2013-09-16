@@ -47,8 +47,9 @@
     length: 0,
     d3Selection: null,
 
-    attr: function(name, val) {
-      return this.d3Selection.attr.apply(this.d3Selection, arguments);
+    attr: function(map) {
+      this.d3Selection.attr(map);
+      return this;
     },
 
     each: function(cb) {
@@ -73,7 +74,11 @@
     },
 
     html: function(htmlString) {
-      return this.d3Selection.html.apply(this, arguments);
+      return this.d3Selection.html.apply(this.d3Selection, arguments);
+    },
+
+    has: function(selector) {
+      return !!this.d3Selection.select(selector).length
     },
 
     // Currently *very* basic. Compares tagNames
