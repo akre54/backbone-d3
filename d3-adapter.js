@@ -47,9 +47,8 @@
     length: 0,
     d3Selection: null,
 
-    attr: function(map) {
-      this.d3Selection.attr(map);
-      return this;
+    attr: function(name, val) {
+      return this.d3Selection.attr.apply(this.d3Selection, arguments);
     },
 
     each: function(cb) {
@@ -74,12 +73,7 @@
     },
 
     html: function(htmlString) {
-      if (htmlString) {
-        this.d3Selection.html(htmlString);
-        return this;
-      } else {
-        return this.d3Selection.html();
-      }
+      return this.d3Selection.html.apply(this, arguments);
     },
 
     // Currently *very* basic. Compares tagNames
@@ -120,12 +114,7 @@
     },
 
     text: function(text) {
-      if (text) {
-        this.d3Selection.text(text);
-        return this;
-      } else {
-        return this.d3Selection.text();
-      }
+      return this.d3Selection.text.apply(this, arguments);
     },
 
     toArray: function() {
@@ -168,9 +157,11 @@
         elements = container.childNodes;
 
         // handle $('<div>', {attrs})
-        _.each(elements, function(el) {
-          if (_.isObject(context)) _.extend(el, context);
-        });
+        if (_.isObject(context)) {
+          _.each(elements, function(el) {
+            _.extend(el, context);
+          });
+        }
         return new D3Adapter(elements);
       } else {
         // Handle jQuery(expression) and jQuery(expression, context).
