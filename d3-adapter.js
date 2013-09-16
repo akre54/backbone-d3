@@ -192,6 +192,7 @@
     });
 
     var xhr = d3.xhr(params.url, params.contentType);
+    xhr.on('beforesend', params.beforeSend);
 
     return xhr.send(params.type, params.data, function(error, json) {
       if (error) {
