@@ -48,8 +48,8 @@
     d3Selection: null,
 
     attr: function(map) {
-      this.d3Selection.attr(map);
-      return this;
+      var ret = this.d3Selection.attr.apply(this.d3Selection, arguments);
+      return typeof map == 'object' ? this : ret;
     },
 
     each: function(cb) {
