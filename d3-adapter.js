@@ -36,7 +36,7 @@
       this.d3Selection = d3.selectAll(elements);
     }
 
-    this.length = this.d3Selection.length;
+    this.length = this.d3Selection[0].length;
     this.d3Selection[0].forEach(function(el, i) {
       this[i] = el;
     }, this);
@@ -83,7 +83,11 @@
 
     // Currently *very* basic. Compares tagNames
     is: function(selector) {
-      return this[0].tagName.toLowerCase() === selector.toLowerCase();
+      selector = selector.toLowerCase();
+      for (var i = 0, l = this.length; i < l; i++) {
+        if (selector !== this[i].tagName.toLowerCase()) return false;
+      }
+      return true;
     },
 
     on: function(eventName, selector, method) {
