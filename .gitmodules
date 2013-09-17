@@ -1,3 +1,6 @@
 [submodule "backbone"]
 	path = backbone
 	url = git@github.com:jashkenas/backbone.git
+[submodule "d3"]
+	path = d3
+	url = git@github.com:mbostock/d3.git
