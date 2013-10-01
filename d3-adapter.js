@@ -123,9 +123,20 @@
 
     trigger: function(eventName) {
       this.each(function(el) {
-        var evt = document.createEvent('UIEvents');
-        evt.initUIEvent(eventName, true, true, window, 0);
+        var detached, rootEl, evt;
+
+        // fix for broken bubbling. TODO
+        if (detached = !document.body.contains(el)) {
+          rootEl = el;
+          while (rootEl.parentNode) rootEl = rootEl.parentNode;
+          document.body.appendChild(rootEl);
+        }
+
+        evt = document.createEvent('UIEvents');
+        evt.initUIEvent(eventName, true, true, window, 1);
         el.dispatchEvent(evt);
+
+        if (detached) document.body.removeChild(rootEl);
       });
 
       return this;
