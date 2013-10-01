@@ -142,7 +142,7 @@
 
     // Alias for this.on
     unbind: function() {
-      return this.on.apply(this, arguments);
+      return this.off.apply(this, arguments);
     }
   });
 
