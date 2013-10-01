@@ -113,15 +113,6 @@
       return this;
     },
 
-    // shim $(document).ready(...)
-    ready: function(callback) {
-      this.d3Selection.each(function() {
-        if (this.readyState == 'complete') callback();
-        var event = this === document ? 'DOMContentLoaded' : 'ready';
-        this.addEventListener(event, callback, false);
-      });
-    },
-
     text: function(text) {
       return this.d3Selection.text.apply(this, arguments);
     },
