@@ -16,12 +16,11 @@ Note: backbone-D3 does not remap the $ object. It only remaps the jQuery object.
 
 ## Limitations
 
-The d3-backbone Adapter currently doesn't support attaching multiple views to a single
+The d3-backbone Adapter currently doesn't support undelegating all events from a view
 element. Ajax and history support are work-in-progress, and not yet fully implemented.
 Because of these limitations the following Backbone unit tests are expected to fail on
 Backbone 1.0.0:
 
- * Backbone.View: View: delegateEvents
  * Backbone.View: View: undelegateEvents
  * Backbone.View: Any tests with complex $el.is() tests
  * All Backbone.Router and Backbone.History
