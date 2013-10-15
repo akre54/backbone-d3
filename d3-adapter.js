@@ -133,7 +133,7 @@
         }
 
         evt = document.createEvent('UIEvents');
-        evt.initUIEvent(eventName, true, true, window, 1);
+        evt.initUIEvent(eventName, true, true, el, 1);
         el.dispatchEvent(evt);
 
         if (detached) document.body.removeChild(rootEl);
