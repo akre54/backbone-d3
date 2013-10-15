@@ -29,17 +29,13 @@
   'use strict'
 
   var D3Adapter = function(elements) {
+    this.d3Selection = elements.nodeType ?
+            d3.select(elements) : d3.selectAll(elements);
 
-    if (elements.nodeType) {
-      this.d3Selection = d3.select(elements);
-    } else {
-      this.d3Selection = d3.selectAll(elements);
-    }
+    var nodes = this.d3Selection[0];
 
-    this.length = this.d3Selection[0].length;
-    this.d3Selection[0].forEach(function(el, i) {
-      this[i] = el;
-    }, this);
+    this.length = nodes.length;
+    _.each(nodes, function(el, i) { this[i] = el; }, this);
   };
 
   _.extend(D3Adapter.prototype, {
@@ -78,7 +74,7 @@
     },
 
     has: function(selector) {
-      return !!this.d3Selection.select(selector).length
+      return !!this.d3Selection.select(selector).length;
     },
 
     // Currently *very* basic. Compares tagNames
@@ -125,7 +121,7 @@
       this.each(function(el) {
         var detached, rootEl, evt;
 
-        // fix for broken bubbling. TODO
+        // fix for broken bubbling: needs to be in the DOM to work. TODO
         if (detached = !document.body.contains(el)) {
           rootEl = el;
           while (rootEl.parentNode) rootEl = rootEl.parentNode;
